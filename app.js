@@ -3,12 +3,23 @@ var express = require('express')
   , sys = require('sys')
   , exec = require('child_process').exec;
 
-function puts(error, stdout, stderr) { sys.puts(stdout); console.log(stdout); }
+function puts(error, stdout, stderr) { sys.puts(stdout); }
 
 app.use(express.bodyParser());
 app.post('/say', function(req, res) {
-  var text = req.param("text", "");
-  exec("echo '" + escape(text) + "' | espeak -s 120 2>/dev/null", puts);
+  // get the text we want spoken
+  var text = req.param('text', '');
+  text = escape(text);
+  text = text.replace(/%20/g, " ");
+
+  // grab the speed at which it should be said
+  var speed = req.param('speed', 120);
+  speed = escape(speed);
+
+  // talk sweet to me baby
+  exec("echo '" + text + "' | espeak -s " + speed + " 2>/dev/null", puts);
+
+  // return an empty response
   var body = '';
   res.setHeader('Content-Type', 'text/plain');
   res.setHeader('Content-Length', body.length);
