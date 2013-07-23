@@ -5,6 +5,7 @@ Post messages to your Raspberry Pi and have them read aloud.
 ## Dependencies
 
 * node
+* expressjs
 
 ## Installation
 
